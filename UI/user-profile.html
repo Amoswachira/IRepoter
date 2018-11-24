@@ -14,44 +14,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/style-user.css">
 
+
 </head>
 
 <body>
+
     <div class="topnav">
-        <a class="active" href="index.html">Home</a>
-        <a href="#">View / Edit Redflag</a>
-        <a href="#">View / Edit Intervention</a>
+        <a href="index.html">Home</a>
+        <a class="active" href="user-profile.html">user profile</a>
+        <a href="view-records.html">View / Edit Records</a>
         <a href="#">Logout</a>
     </div>
-    <div id="record-box">
-        <center>
-            <br>
-            <br>
-            <h1>Create Records</h1>
-            <form action="">
-                <input type="email" name="" id="" placeholder="Enter your Email Address">
-                <label>Red Flag Record
-                    <input type="radio" name="record" id="">
-                </label>
-                <label>Intervention Record
-                    <input type="radio" name="record" id="">
-                </label>
-                <input type="text" name="" id="" placeholder="Enter Title">
-                <input type="text" name="" id="" placeholder="Enter Description of record">
-                <input type="text" name="" id="" placeholder="Enter longitude and latatitude">
-                <input type="date" name="" id="" placeholder="Date">
-                <label for="fileupload"> Select an image or video file to upload</label>
-                <input type="file" name="fileupload" value="fileupload" id="fileupload">
 
+    <div id="box">
+        <div class="left-box">
+            <div class="card">
+                <img src="images/img.jpg" alt="profile picture" style="width:100%">
+                <h1>John Doe</h1>
+                <p class="title">email@gamil.com</p>
+                <p><button>change user name</button></p>
+            </div>
+        </div>
 
+        <div class="right-box">
+            <center>
+                <h1>Create Records</h1>
+                <form action="">
+                    <input type="email" name="" id="" placeholder="Enter your Email Address">
+                    <label>Red Flag Record
+                        <input type="radio" name="record" id="">
+                    </label>
+                    <label>Intervention Record
+                        <input type="radio" name="record" id="">
+                    </label>
+                    <input type="text" name="" id="" placeholder="Enter Title">
+                    <input type="text" name="" id="" placeholder="Enter Description of record">
+                    <input type="text" name="" id="" placeholder="Enter longitude and latatitude">
+                    <input type="date" name="" id="" placeholder="Date">
+                    <label for="fileupload"> Select an image or video file to upload</label>
+                    <input type="file" name="fileupload" value="fileupload" id="fileupload">
+                    <br>
+                    <input type="submit" value="Create Record">
+                </form>
 
-
-                <input type="submit" value="Create Record">
-            </form>
-        </center>
+            </center>
+        </div>
 
     </div>
-
     </div>
     <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
