@@ -4,6 +4,10 @@ language: python
 # Mention the python version in which travis will run the app
 python:
   - "3.6"
+# blocklist
+branches:
+  except:
+  -master
 
 
 # command to install dependencies in the requirements file
