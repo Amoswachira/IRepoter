@@ -91,6 +91,7 @@ class RedFlag(Resource):
         }))             
 
     def put(self, redflag_id):
+        '''edit redflag record'''
         for incident in INCIDENTS:
             if incident['id'] == redflag_id:
                 incident['createdBy'] = request.json.get
@@ -119,3 +120,50 @@ class RedFlag(Resource):
             "status": 404,
             "error": "Red-flag does not exist"
         }), 404)
+
+
+class UpdateLocation(Resource):
+    '''update redflag record location'''
+    def patch(self, redflag_id):
+        for incident in INCIDENTS:
+            if incident['id'] == redflag_id:
+                incident['location'] = request.json.get
+                ('location', incident['location'])
+
+                success_message = {
+                    "id": redflag_id,
+                    "message": "Updated red-flag record's location"
+                }
+
+                return make_response(jsonify({
+                    "status": 201,
+                    "data": success_message
+                }), 201)
+        return make_response(jsonify({
+            "status": 404,
+            "error": "Red-flag does not exist"
+        }), 404)        
+
+
+class UpdateComment(Resource):
+    '''update comment'''
+    def patch(self, redflag_id):
+        for incident in INCIDENTS:
+            if incident['id'] == redflag_id:
+                incident['comment'] = request.json.get
+                ('comment', incident['comment'])
+
+                success_message = {
+                    "id": redflag_id,
+                    "message": "Updated red-flag record's comment"
+                }
+
+                return make_response(jsonify({
+                    "status": 201,
+                    "data": success_message
+                }), 201)
+        return make_response(jsonify({
+            "status": 404,
+            "error": "Red-flag does not exist"
+        }), 404)  
+        
