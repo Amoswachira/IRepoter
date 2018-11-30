@@ -54,14 +54,14 @@ class RedFlagTestCase(unittest.TestCase):
     #     self.assertEqual(response.status_code, 404)
     #     self.assertIn("Red-flag does not exist", str(result))
 
-    # def test_delete_one_redflag(self):
-    #     response = self.client.post(
-    #             URL_REDFLAGS, headers=HEADERS, data=json.dumps(self.data)
-    #         )
-    #     response2 = self.client.delete(URL_REDFLAGS_ID)
-    #     result = json.loads(response2.data)
-    #     self.assertEqual(response2.status_code, 200)
-    #     self.assertIn('red-flag record has been deleted', str(result))
+    def test_delete_one_redflag(self):
+        response = self.client.post(
+                URL_REDFLAGS, headers=HEADERS, data=json.dumps(self.data)
+            )
+        response2 = self.client.delete(URL_REDFLAGS_ID)
+        result = json.loads(response2.data)
+        self.assertEqual(response2.status_code, 200)
+        self.assertIn('red-flag record has been deleted', str(result))
 
     # def test_update_location_of_one_redflag(self):
     #     response = self.client.post(
