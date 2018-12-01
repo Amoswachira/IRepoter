@@ -9,4 +9,4 @@ def create_app():
     app = Flask(__name__)
     # api = Api(app)
     app.register_blueprint(v1)
-    return app 
+    return app

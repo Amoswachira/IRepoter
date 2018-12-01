@@ -22,7 +22,7 @@ install:
 # This is the script that enables travis to run the tests
 # There are many ways to do dependeing on how you want travis to run and get you coverage
 script: true
-  - pytest --cov=./app
+  - pytest --cov-report term-missing --cov=./app
   
  # Another command/method to run tests
 script: 
