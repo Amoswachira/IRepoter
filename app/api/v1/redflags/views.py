@@ -60,7 +60,7 @@ class RedFlag(Resource):
         self.db = INCIDENTS
         
     def get(self, redflag_id):
-
+        '''get a redflag'''
         for incident in INCIDENTS:
             if incident['id'] == redflag_id:
                 return make_response(jsonify({
@@ -70,4 +70,22 @@ class RedFlag(Resource):
         return make_response(jsonify({
             "status": 404,
             "error": "Red-flag does not exist"
-        }), 404)      
+        }), 404) 
+
+    def delete(self, redflag_id):
+        '''delete a redflag'''
+        for incident in INCIDENTS:
+            if incident['id'] == redflag_id:
+                INCIDENTS.remove(incident)
+                success_message = {
+                 'id': redflag_id,
+                 'message': 'red-flag record has been deleted'
+                }
+                return make_response(jsonify({
+                 "status": 204,
+                 "data": success_message
+                }))
+        return make_response(jsonify({
+            "status": 404,
+            "error": "Red-flag does not exist"
+        }))             
