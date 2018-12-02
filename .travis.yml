@@ -17,23 +17,14 @@ install:
   - pip install coverage
   - pip install pytest-cov
   - pip install coveralls
-
+  - pip install --user codecov
+# or
+  - conda install -c conda-forge codecov
 # command to run tests 
 # This is the script that enables travis to run the tests
 # There are many ways to do dependeing on how you want travis to run and get you coverage
-script: true
-  - pytest --cov-report term-missing --cov=./app
-  
- # Another command/method to run tests
-script: 
-  - pytest
-
-# This returns the coverage and let's coveralls know the coverage percent. 
-# Note that travis will build your system and get the coverage. 
-# It cannot display, therefore coveralls becomes important to get the coverage
-# You can also use after_success
-after_success:
-  - coveralls
+#script: true
+#- pytest --cov-report term-missing --cov=./app
  
 # Using codecov to get coverage
 after_success:
