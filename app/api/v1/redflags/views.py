@@ -52,3 +52,22 @@ class RedFlags(Resource):
             "status": 201,
             "data": success_message
         }), 201)
+
+
+class RedFlag(Resource):
+    """ RedFlag specific"""
+    def __init__(self):
+        self.db = INCIDENTS
+        
+    def get(self, redflag_id):
+
+        for incident in INCIDENTS:
+            if incident['id'] == redflag_id:
+                return make_response(jsonify({
+                    "status": 200,
+                    "data": incident
+                }), 200)
+        return make_response(jsonify({
+            "status": 404,
+            "error": "Red-flag does not exist"
+        }), 404)      
