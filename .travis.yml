@@ -17,6 +17,12 @@ install:
   - pip install coverage
   - pip install pytest-cov
   - pip install codecov
+
+# command to run tests 
+# This is the script that enables travis to run the tests
+# There are many ways to do dependeing on how you want travis to run and get you coverage
+script: true
+  - pytest --cov-report term-missing --cov=./app
   
 # Using codecov to get coverage
 after_success:
