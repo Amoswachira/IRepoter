@@ -5,7 +5,7 @@ from app import create_app
 HEADERS = {'Content-Type': 'application/json'}
 URL_REDFLAGS = "/api/v1/red-flags"
 URL_REDFLAGS_ID = "/api/v1/red-flags/1"
-# URL_REDFLAGS_IDS = "/api/v1/red-flags/111"
+URL_REDFLAGS_IDS = "/api/v1/red-flags/111"
 # URL_LOCATION = "/api/v1/red-flags/1/location"
 # URL_COMMENT = "/api/v1/red-flags/1/comment"
 
@@ -48,11 +48,11 @@ class RedFlagTestCase(unittest.TestCase):
         result = json.loads(response2.data)
         self.assertEqual(response2.status_code, 200)
 
-    # def test_redflag_not_found(self):
-    #     response = self.client.get(URL_REDFLAGS_IDS)
-    #     result = json.loads(response.data)
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertIn("Red-flag does not exist", str(result))
+    def test_redflag_not_found(self):
+        response = self.client.get(URL_REDFLAGS_IDS)
+        result = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertIn("Red-flag does not exist", str(result))
 
     def test_delete_one_redflag(self):
         response = self.client.post(
