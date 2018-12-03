@@ -3,4 +3,4 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 
 [![Build Status](https://travis-ci.org/Amoswachira/IRepoter.svg?branch=ft-patch-location-comment-%23162341392)](https://travis-ci.org/Amoswachira/IRepoter)
 
-[![Coverage Status](https://coveralls.io/repos/github/Amoswachira/IRepoter/badge.svg)](https://coveralls.io/github/Amoswachira/IRepoter)
+[![Coverage Status](https://coveralls.io/repos/github/Amoswachira/IRepoter/badge.svg?branch=ft-patch-location-comment-%23162341392)](https://coveralls.io/github/Amoswachira/IRepoter?branch=ft-patch-location-comment-%23162341392)
