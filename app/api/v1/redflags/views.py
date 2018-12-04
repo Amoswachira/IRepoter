@@ -134,6 +134,7 @@ class RedFlag(Resource):
 
 class UpdateLocation(Resource):
     '''redflag class for updatelocation/patch'''
+
     def __init__(self):
         self.db = RedFlagModel()
 
@@ -155,12 +156,12 @@ class UpdateLocation(Resource):
 
 class UpdateComment(Resource):
     '''class for update location'''
+
     def __init__(self):
         self.db = RedFlagModel()
 
     def patch(self, redflag_id):
         '''patch comment'''
-        args = parser.parse_args()
         incident = self.db.find(redflag_id)
         if incident:
             incident['comment'] = request.json.get(
