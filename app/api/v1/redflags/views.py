@@ -1,7 +1,44 @@
-from flask_restful import Resource
+'''views for redflags '''
+from flask_restful import Resource, reqparse
 from flask import jsonify, make_response, request
 from .models import RedFlagModel
 import datetime
+
+##################################################
+###### implement validation using reqparse #######
+##################################################
+parser = reqparse.RequestParser(bundle_errors=True)
+parser.add_argument('type',
+                    type=str,
+                    required=True,
+                    help="This field cannot be left blank! "
+                    )
+
+parser.add_argument('location',
+                    type=str,
+                    required=True,
+                    help="This field cannot be left blank!"
+                    )
+
+parser.add_argument('status',
+                    type=str,
+                    required=True,
+                    help="This field cannot be left blank!"
+                    )
+parser.add_argument('images',
+                    action='append',
+                    help="This field can be left blank!"
+                    )
+parser.add_argument('videos',
+                    action='append',
+                    help="This field can be left blank!"
+                    )
+
+parser.add_argument('comment',
+                    type=str,
+                    required=True,
+                    help="This field cannot be left blank!"
+                    )
 
 
 class RedFlags(Resource):
@@ -11,7 +48,8 @@ class RedFlags(Resource):
         self.db = RedFlagModel()
 
     def post(self):
-
+        '''post redfalgs'''
+        args = parser.parse_args()
         data = {
             'createdOn': datetime.datetime.utcnow(),
             'createdBy': request.json.get('createdBy', ""),
@@ -23,6 +61,7 @@ class RedFlags(Resource):
             'title': request.json['title'],
             'comment': request.json.get('comment', "")
         }
+
         self.db.save(data)
 
         success_message = {
@@ -35,6 +74,7 @@ class RedFlags(Resource):
         }), 201)
 
     def get(self):
+        '''get all redflags'''
         self.db.get_all()
         return make_response(jsonify({
             "status": 200,
@@ -43,12 +83,13 @@ class RedFlags(Resource):
 
 
 class RedFlag(Resource):
-    """docstring of RedFlag"""
+    """ RedFlag class for get, delete and put"""
 
     def __init__(self):
         self.db = RedFlagModel()
 
     def get(self, redflag_id):
+        '''get a specific redflag'''
         incident = self.db.find(redflag_id)
         return make_response(jsonify({
             "status": 200,
@@ -56,6 +97,7 @@ class RedFlag(Resource):
         }), 200)
 
     def delete(self, redflag_id):
+        '''delete a specific redflag'''
         incident = self.db.find(redflag_id)
         self.db.delete(incident)
         success_message = {
@@ -67,6 +109,7 @@ class RedFlag(Resource):
         }))
 
     def put(self, redflag_id):
+        '''put redflags'''
         incident = self.db.find(redflag_id)
         if incident:
             incident['createdBy'] = request.json.get(
@@ -90,10 +133,12 @@ class RedFlag(Resource):
 
 
 class UpdateLocation(Resource):
+    '''redflag class for updatelocation/patch'''
     def __init__(self):
         self.db = RedFlagModel()
 
     def patch(self, redflag_id):
+        '''patch location'''
         incident = self.db.find(redflag_id)
         if incident:
             incident['location'] = request.json.get(
@@ -109,10 +154,13 @@ class UpdateLocation(Resource):
 
 
 class UpdateComment(Resource):
+    '''class for update location'''
     def __init__(self):
         self.db = RedFlagModel()
 
     def patch(self, redflag_id):
+        '''patch comment'''
+        args = parser.parse_args()
         incident = self.db.find(redflag_id)
         if incident:
             incident['comment'] = request.json.get(
