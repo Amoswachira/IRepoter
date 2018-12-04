@@ -15,6 +15,9 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 - The application should display a Google Map with Marker showing the red-flag or intervention location.
 
 
+### Heroku Link
+https://irepoterapiv1.herokuapp.com/api/v1/red-flags
+
 ## Installation and Deployment.
 
 ### Clone the repo
@@ -38,8 +41,6 @@ on Windows, virtualenv creates a batch file
 #### How to Run the App
 > ```.env
 > flask run
-
- 
 
 
 ## Endpoints to test
