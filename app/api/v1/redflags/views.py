@@ -11,7 +11,9 @@ parser = reqparse.RequestParser(bundle_errors=True)
 parser.add_argument('type',
                     type=str,
                     required=True,
-                    help="This field cannot be left blank! "
+                    choices=("red-flag", "intervention"),
+                    help="This field cannot be left "
+                         "blank or Bad choice: {error_msg}"
                     )
 
 parser.add_argument('location',
@@ -35,6 +37,11 @@ parser.add_argument('videos',
                     )
 
 parser.add_argument('comment',
+                    type=str,
+                    required=True,
+                    help="This field cannot be left blank!"
+                    )
+parser.add_argument('title',
                     type=str,
                     required=True,
                     help="This field cannot be left blank!"

@@ -22,7 +22,7 @@ class RedFlagTestCase(unittest.TestCase):
             "id": 1,
             "createdOn": "Tue, 27 Nov 2018 19:11:10 GMT",
             "createdBy": "Jane",
-            'type': 'red-flags',
+            'type': 'red-flag',
             "location": "Meru",
             "status": "draft",
             "images": "",
@@ -65,12 +65,7 @@ class RedFlagTestCase(unittest.TestCase):
         self.assertEqual(response2.status_code, 200)
         self.assertIn('red-flag record has been deleted', str(result))
 
-    # def test_redflag_not_found(self):
-    #     '''test redflag not found'''
-    #     response = self.client.get(URL_REDFLAGS_IDS)
-    #     result = json.loads(response.data)
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertIn("Red-flag does not exist", str(result))
+    
 
     def test_update_location_of_one_redflag(self):
         '''test update location of one redflag'''
