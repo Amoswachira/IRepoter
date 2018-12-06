@@ -1,78 +1,128 @@
-'''views for redflags '''
+'''view for incidents records '''
+import datetime
 from flask_restful import Resource, reqparse
 from flask import jsonify, make_response, request
 from .models import RedFlagModel
-import datetime
+
 
 ##################################################
 ###### implement validation using reqparse #######
 ##################################################
-parser = reqparse.RequestParser(bundle_errors=True)
-parser.add_argument('type',
+
+
+def is_valid(value):
+    '''check if the string is empty'''
+    if not value:
+        raise ValueError("empty string")
+
+
+PARSER = reqparse.RequestParser(bundle_errors=True)
+PARSER.add_argument('type',
                     type=str,
                     required=True,
                     choices=("red-flag", "intervention"),
-                    help="This field cannot be left "
+                    help="type field cannot be left "
                          "blank or Bad choice: {error_msg}"
                     )
 
-parser.add_argument('location',
-                    type=str,
+PARSER.add_argument('createdBy',
+                    type=is_valid,
                     required=True,
-                    help="This field cannot be left blank!"
+                    help="createdBy field cannot be left blank!"
+                    )
+PARSER.add_argument('location',
+                    type=is_valid,
+                    required=True,
+                    help="location field cannot be left blank!{error_msg}"
                     )
 
-parser.add_argument('status',
-                    type=str,
+PARSER.add_argument('status',
+                    type=is_valid,
                     required=True,
-                    help="This field cannot be left blank!"
+                    help="status field cannot be left blank!"
                     )
-parser.add_argument('images',
+PARSER.add_argument('images',
                     action='append',
-                    help="This field can be left blank!"
+                    help="images field can be left blank!"
                     )
-parser.add_argument('videos',
+PARSER.add_argument('videos',
                     action='append',
-                    help="This field can be left blank!"
+                    help="videos field can be left blank!"
                     )
 
-parser.add_argument('comment',
-                    type=str,
+PARSER.add_argument('comment',
+                    type=is_valid,
                     required=True,
-                    help="This field cannot be left blank!"
+                    help="comment field cannot be left blank!"
                     )
-parser.add_argument('title',
-                    type=str,
+PARSER.add_argument('title',
+                    type=is_valid,
                     required=True,
-                    help="This field cannot be left blank!"
+                    help="title field cannot be left blank!"
                     )
 
 
 class RedFlags(Resource):
-    """docstring for RedFlags"""
+    """ post method and get method for incidents records """
 
     def __init__(self):
+        '''init(constructor) '''
         self.db = RedFlagModel()
 
     def post(self):
-        '''post redfalgs'''
-        args = parser.parse_args()
+        '''post incident records method'''
+        PARSER.parse_args()
         data = {
             'createdOn': datetime.datetime.utcnow(),
             'createdBy': request.json.get('createdBy', ""),
-            'type': 'red-flags',
+            'type': request.json['type'],
             'location': request.json.get('location', ""),
-            'status': "Under Invsetigation",
+            'status': request.json['status'],
             'images': request.json.get('images', ""),
             'videos': request.json.get('videos', ""),
             'title': request.json['title'],
             'comment': request.json.get('comment', "")
         }
+        ##################################################
+        #### validate if incidents are of type string ####
+        ##################################################
+        for key, value in data.items():
+            if key == 'location' and type(value) != str:
+                return {"status": 400,
+                        "data": [{
+                            "message": "location  must be a string."
+                        }]}, 400
+            elif key == 'status' and type(value) != str:
+                return {"status": 400,
+                        "data": [{
+                            "message": "status  must be a string."
+                        }]}, 400
+            elif key == 'createdBy' and type(value) != str:
+                return {"status": 400,
+                        "data": [{
+                            "message": "createdBy  must be a string."
+                        }]}, 400
+            elif key == 'type' and type(value) != str:
+                return {"status": 400,
+                        "data": [{
+                            "message": "type  must be a string."
+                        }]}, 400
+
+            elif key == 'comment' and type(value) != str:
+                return {"status": 400,
+                        "data": [{
+                            "message": "comment  must be a string."
+                        }]}, 400
+            elif key == 'title' and type(value) != str:
+                return {"status": 400,
+                        "data": [{
+                            "message": "title  must be a string."
+                        }]}, 400
 
         self.db.save(data)
 
         success_message = {
-            'message': 'Created red-flag record'
+            'message': 'Created Incident record'
         }
 
         return make_response(jsonify({
@@ -81,7 +131,7 @@ class RedFlags(Resource):
         }), 201)
 
     def get(self):
-        '''get all redflags'''
+        '''get method for all incidents'''
         self.db.get_all()
         return make_response(jsonify({
             "status": 200,
@@ -90,33 +140,49 @@ class RedFlags(Resource):
 
 
 class RedFlag(Resource):
-    """ RedFlag class for get, delete and put"""
+    """ 
+    Get method for specific id,
+    delete method for a specific id,
+    put method for specific id
+    """
 
     def __init__(self):
+        '''init(constructor) '''
         self.db = RedFlagModel()
 
     def get(self, redflag_id):
         '''get a specific redflag'''
         incident = self.db.find(redflag_id)
-        return make_response(jsonify({
-            "status": 200,
-            "data": incident
-        }), 200)
+        if incident:
+            return make_response(jsonify({
+                "status": 200,
+                "data": incident
+            }), 200)
+        return {"status": 404,
+                "data": [{
+                    "message": "Incident record does not exist."
+                }]}, 404
 
     def delete(self, redflag_id):
         '''delete a specific redflag'''
         incident = self.db.find(redflag_id)
-        self.db.delete(incident)
-        success_message = {
-            'message': 'red-flag record has been deleted'
-        }
-        return make_response(jsonify({
-            "status": 204,
-            "data": success_message
-        }))
+        if incident:
+            self.db.delete(incident)
+            success_message = {
+                'message': 'Incident has been deleted'
+            }
+            return make_response(jsonify({
+                "status": 204,
+                "data": success_message
+            }))
+        return {"status": 404,
+                "data": [{
+                    "message": "Incident record Not Found."
+                }]}, 404
 
     def put(self, redflag_id):
-        '''put redflags'''
+        '''update a specific redflag'''
+        PARSER.parse_args()
         incident = self.db.find(redflag_id)
         if incident:
             incident['createdBy'] = request.json.get(
@@ -130,19 +196,24 @@ class RedFlag(Resource):
                 'comment', incident['comment'])
 
             success_message = {
-                "message": "Red-flag has been updated"
+                "message": "Incident record has been updated"
             }
 
             return make_response(jsonify({
                 "status": 201,
                 "data": success_message
             }), 201)
+        return {"status": 404,
+                "data": [{
+                    "message": "Incident record Not Found."
+                }]}, 404
 
 
 class UpdateLocation(Resource):
-    '''redflag class for updatelocation/patch'''
+    ''' patch method for location'''
 
     def __init__(self):
+        '''init(constructor) intialize the db '''
         self.db = RedFlagModel()
 
     def patch(self, redflag_id):
@@ -152,33 +223,41 @@ class UpdateLocation(Resource):
             incident['location'] = request.json.get(
                 'location', incident['location'])
             success_message = {
-                "message": "Updated red-flag record's location"
+                "message": "Updated Incident's location"
             }
 
             return make_response(jsonify({
                 "status": 201,
                 "data": success_message
             }), 201)
+        return {"status": 404,
+                "data": [{
+                    "message": "Incident record Not Found."
+                }]}, 404
 
 
 class UpdateComment(Resource):
-    '''class for update location'''
+    '''class which includes patch method for comment '''
 
     def __init__(self):
         self.db = RedFlagModel()
 
     def patch(self, redflag_id):
-        '''patch comment'''
+        '''patch comment method'''
         incident = self.db.find(redflag_id)
         if incident:
             incident['comment'] = request.json.get(
                 'comment', incident['comment'])
 
             success_message = {
-                "message": "Updated red-flag record's comment"
+                "message": "Updated Incident's comment"
             }
 
             return make_response(jsonify({
                 "status": 201,
                 "data": success_message
             }), 201)
+        return {"status": 404,
+                "data": [{
+                    "message": "Incident record Not Found."
+                }]}, 404

@@ -1,4 +1,4 @@
-'''Tests for the redflags endpoints'''
+'''Tests for the incident endpoints'''
 import unittest
 import json
 from app import create_app
@@ -32,19 +32,18 @@ class RedFlagTestCase(unittest.TestCase):
         }
 
     def test_get_redflags(self):
-        '''test get all red flags'''
+        '''test get all  incidents'''
         response = self.client.get(URL_REDFLAGS)
-        result = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
 
     def test_post_redflag(self):
-        '''test for post  redflags'''
+        '''test for post  incident'''
         response = self.client.post(
             URL_REDFLAGS, headers=HEADERS, data=json.dumps(self.data)
         )
         result = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
-        self.assertIn('Created red-flag record', str(result))
+        self.assertIn('Created Incident record', str(result))
 
     def test_get_one_redflag(self):
         '''test for getting a specific redflag'''
@@ -52,7 +51,6 @@ class RedFlagTestCase(unittest.TestCase):
             URL_REDFLAGS, headers=HEADERS, data=json.dumps(self.data)
         )
         response2 = self.client.get(URL_REDFLAGS_ID)
-        result = json.loads(response2.data)
         self.assertEqual(response2.status_code, 200)
 
     def test_delete_one_redflag(self):
@@ -63,9 +61,7 @@ class RedFlagTestCase(unittest.TestCase):
         response2 = self.client.delete(URL_REDFLAGS_ID)
         result = json.loads(response2.data)
         self.assertEqual(response2.status_code, 200)
-        self.assertIn('red-flag record has been deleted', str(result))
-
-    
+        self.assertIn('Incident has been deleted', str(result))
 
     def test_update_location_of_one_redflag(self):
         '''test update location of one redflag'''
@@ -79,7 +75,7 @@ class RedFlagTestCase(unittest.TestCase):
         )
         result = json.loads(response2.data)
         self.assertEqual(response2.status_code, 201)
-        self.assertIn("Updated red-flag record's location", str(result))
+        self.assertIn("Updated Incident's location", str(result))
 
     def test_update_comment_of_one_redflag(self):
         '''test upadate comment for a redflag'''
@@ -93,7 +89,7 @@ class RedFlagTestCase(unittest.TestCase):
         )
         result = json.loads(response2.data)
         self.assertEqual(response2.status_code, 201)
-        self.assertIn("Updated red-flag record's comment", str(result))
+        self.assertIn("Updated Incident's comment", str(result))
 
 
 if __name__ == "__main__":
