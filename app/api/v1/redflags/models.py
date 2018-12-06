@@ -16,6 +16,7 @@ class RedFlagModel():
         if len(INCIDENTS) == 0:
             self.id = 1
         else:
+            # last item in the array + 1
             self.id = INCIDENTS[-1]['id'] + 1
         self.id = len(INCIDENTS) + 1
 

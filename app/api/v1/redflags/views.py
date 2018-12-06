@@ -1,19 +1,26 @@
 '''view for incidents records '''
 import datetime
+import re
 from flask_restful import Resource, reqparse
 from flask import jsonify, make_response, request
 from .models import RedFlagModel
-
-
-##################################################
-###### implement validation using reqparse #######
-##################################################
 
 
 def is_valid(value):
     '''check if the string is empty'''
     if not value:
         raise ValueError("empty string")
+
+
+def is_title_valid(value):
+    '''check if string has  special characters or numbers
+    '''
+    if not re.match(r"[A-Za-z]", value):
+        raise ValueError("contains special characters or numbers")
+
+##################################################
+###### implement validation using reqparse #######
+##################################################
 
 
 PARSER = reqparse.RequestParser(bundle_errors=True)
@@ -27,19 +34,20 @@ PARSER.add_argument('type',
 
 PARSER.add_argument('createdBy',
                     type=is_valid,
-                    required=True,
-                    help="createdBy field cannot be left blank!"
+                    help="createdBy field can be left blank!"
                     )
 PARSER.add_argument('location',
-                    type=is_valid,
+                    type=is_title_valid,
                     required=True,
-                    help="location field cannot be left blank!{error_msg}"
+                    help="location field cannot be left blank or {error_msg}"
                     )
 
 PARSER.add_argument('status',
-                    type=is_valid,
+                    type=str,
                     required=True,
-                    help="status field cannot be left blank!"
+                    choices=("draft"),
+                    help="'statuss field cannot be left "
+                         "blank or Bad choice: {error_msg}"
                     )
 PARSER.add_argument('images',
                     action='append',
@@ -51,14 +59,14 @@ PARSER.add_argument('videos',
                     )
 
 PARSER.add_argument('comment',
-                    type=is_valid,
+                    type=is_title_valid,
                     required=True,
-                    help="comment field cannot be left blank!"
+                    help="comment field cannot be left blank or {error_msg}!"
                     )
 PARSER.add_argument('title',
-                    type=is_valid,
+                    type=is_title_valid,
                     required=True,
-                    help="title field cannot be left blank!"
+                    help="title field cannot be left blank or  {error_msg} !"
                     )
 
 
@@ -75,9 +83,9 @@ class RedFlags(Resource):
         data = {
             'createdOn': datetime.datetime.utcnow(),
             'createdBy': request.json.get('createdBy', ""),
-            'type': request.json['type'],
+            'type': 'red-flag',
             'location': request.json.get('location', ""),
-            'status': request.json['status'],
+            'status': "draft",
             'images': request.json.get('images', ""),
             'videos': request.json.get('videos', ""),
             'title': request.json['title'],
@@ -92,20 +100,11 @@ class RedFlags(Resource):
                         "data": [{
                             "message": "location  must be a string."
                         }]}, 400
-            elif key == 'status' and type(value) != str:
-                return {"status": 400,
-                        "data": [{
-                            "message": "status  must be a string."
-                        }]}, 400
+
             elif key == 'createdBy' and type(value) != str:
                 return {"status": 400,
                         "data": [{
                             "message": "createdBy  must be a string."
-                        }]}, 400
-            elif key == 'type' and type(value) != str:
-                return {"status": 400,
-                        "data": [{
-                            "message": "type  must be a string."
                         }]}, 400
 
             elif key == 'comment' and type(value) != str:
