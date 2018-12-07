@@ -18,7 +18,7 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 https://web.postman.co/collections/3870907-2c54498f-d063-61ef-833e-53a48ca70283?workspace=0f58c448-3ac6-4606-8c31-394ef43facc1
 
 ### Heroku Link
-https://irepoterapiv1.herokuapp.com/api/v1/red-flags
+https://irepoter77.herokuapp.com/api/v1/red-flags
 
 ## Installation and Deployment.
 
