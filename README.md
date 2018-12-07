@@ -15,7 +15,7 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 - The application should display a Google Map with Marker showing the red-flag or intervention location.
 
 ### Postman link
-https://documenter.getpostman.com/view/3870907/RzffLWDD#fb00e4a5-4f14-2aa6-6648-f650e9f0b1b2
+https://web.postman.co/collections/3870907-2c54498f-d063-61ef-833e-53a48ca70283?workspace=0f58c448-3ac6-4606-8c31-394ef43facc1
 
 ### Heroku Link
 https://irepoterapiv1.herokuapp.com/api/v1/red-flags

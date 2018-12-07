@@ -33,8 +33,8 @@ PARSER.add_argument('type',
                     )
 
 PARSER.add_argument('createdBy',
-                    type=is_valid,
-                    help="createdBy field can be left blank!"
+                    type=is_title_valid,
+                    help="createdBy field can be left blank or {error_msg}"
                     )
 PARSER.add_argument('location',
                     type=is_title_valid,
