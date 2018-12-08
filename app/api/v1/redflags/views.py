@@ -19,7 +19,7 @@ def is_title_valid(value):
         raise ValueError("contains special characters or numbers")
 
 ##################################################
-###### implement validation using reqparse #######
+# implement validation using reqparse      #######
 ##################################################
 
 
@@ -29,17 +29,17 @@ PARSER.add_argument('type',
                     required=True,
                     choices=("red-flag", "intervention"),
                     help="type field cannot be left "
-                         "blank or Bad choice: {error_msg}"
+                         "blank or Bad choice: {error_msg},400"
                     )
 
 PARSER.add_argument('createdBy',
                     type=is_title_valid,
-                    help="createdBy field can be left blank or {error_msg}"
+                    help="createdBy field can be left blank or {error_msg},400"
                     )
 PARSER.add_argument('location',
                     type=is_title_valid,
                     required=True,
-                    help="location field cannot be left blank or {error_msg}"
+                    help="location field annt be left blank or {error_msg},400"
                     )
 
 PARSER.add_argument('status',
@@ -47,7 +47,7 @@ PARSER.add_argument('status',
                     required=True,
                     choices=("draft"),
                     help="'statuss field cannot be left "
-                         "blank or Bad choice: {error_msg}"
+                         "blank or Bad choice: {error_msg},400"
                     )
 PARSER.add_argument('images',
                     action='append',
@@ -61,12 +61,12 @@ PARSER.add_argument('videos',
 PARSER.add_argument('comment',
                     type=is_title_valid,
                     required=True,
-                    help="comment field cannot be left blank or {error_msg}!"
+                    help="comment field cannt be left blank or {error_msg},400"
                     )
 PARSER.add_argument('title',
                     type=is_title_valid,
                     required=True,
-                    help="title field cannot be left blank or  {error_msg} !"
+                    help="title field cannot be left blank or  {error_msg},400"
                     )
 
 
@@ -92,7 +92,7 @@ class RedFlags(Resource):
             'comment': request.json.get('comment', "")
         }
         ##################################################
-        #### validate if incidents are of type string ####
+        # validate if incidents are of type string    ####
         ##################################################
         for key, value in data.items():
             if key == 'location' and type(value) != str:
@@ -217,6 +217,14 @@ class UpdateLocation(Resource):
 
     def patch(self, redflag_id):
         '''patch location'''
+        paserr = reqparse.RequestParser(bundle_errors=True)
+        paserr.add_argument('location',
+                            type=is_title_valid,
+                            required=True,
+                            help="location field cannt be left blank or"
+                            "{error_msg},400"
+                            )
+        paserr.parse_args()
         incident = self.db.find(redflag_id)
         if incident:
             incident['location'] = request.json.get(
@@ -243,6 +251,14 @@ class UpdateComment(Resource):
 
     def patch(self, redflag_id):
         '''patch comment method'''
+        paserrr = reqparse.RequestParser(bundle_errors=True)
+        paserrr.add_argument('comment',
+                             type=is_title_valid,
+                             required=True,
+                             help="comment field cannt be left blank or"
+                             "{error_msg},400"
+                             )
+        paserrr.parse_args()
         incident = self.db.find(redflag_id)
         if incident:
             incident['comment'] = request.json.get(
