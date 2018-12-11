@@ -1,34 +1,3 @@
-<<<<<<< HEAD
-# Let travis know the language it needs to run
-language: python
-
-# Mention the python version in which travis will run the app
-python:
-  - "3.6"
-
-# blocklist
-branches:
-  except:
-  - master
-# command to install dependencies in the requirements file
-# You can also install the coverage here to avoid it being in the requirements file
-# It is important to avoid things like coverage, pep8 that are not required to run the app
-install:
-  - pip install -r requirements.txt
-  - pip install coverage
-  - pip install pytest-cov
-  - pip install codecov
-
-# command to run tests 
-# This is the script that enables travis to run the tests
-# There are many ways to do dependeing on how you want travis to run and get you coverage
-script: true
-  - pytest --cov-report term-missing --cov=./app
-  
-# Using codecov to get coverage
-after_success:
-  - codecov
-=======
 language: python
 
 python:
@@ -44,4 +13,3 @@ script:
 after_success:
   - coveralls
   - codecov --token=78d71ff5-3038-4998-bfdf-32b2b6312549
->>>>>>> 59089a3bec9064a66ed52947a62c3a9649c6df37

@@ -100,23 +100,23 @@ class RedFlagTestCase(unittest.TestCase):
         result = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertIn("Incident record does not exist", str(result))
-       
+
     def test_no_comment_updated(self):
         """Test if comment  is updated using the right id  in redflag"""
         response = self.client.patch(URL_COMMENT_NOT_UPDATED, headers=HEADERS,
-                                  data=json.dumps({"comment": "TEST"}))
+                                     data=json.dumps({"comment": "TEST"}))
         result = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertIn("Incident record Not Found", str(result))
-    
+
     def test_no_location_updated(self):
         """Test if location  is updated using the right id  in redflag"""
         response = self.client.patch(URL_LOCATION_NOT_UPDATED, headers=HEADERS,
-                                  data=json.dumps({"location": "test location"}))
+                                     data=json.dumps({"location": "test location"}))
         result = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertIn("Incident record Not Found", str(result))
-    
+
 
 if __name__ == "__main__":
     unittest.main()
