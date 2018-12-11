@@ -216,21 +216,18 @@ class UpdateLocation(Resource):
         location_paserr.add_argument('location',
                                      type=has_valid_characters,
                                      required=True,
-                                     help="location field cannt be left blank or"
-                                     "{error_msg},400"
+                                     help="location field can't be left blank"
                                      )
         location_paserr.parse_args()
         location_incident = self.db.find(redflag_id)
         if location_incident:
             location_incident['location'] = request.json.get(
                 'location', location_incident['location'])
-            success_message = {
-                "message": "Updated Incident's location"
-            }
-
             return make_response(jsonify({
                 "status": 201,
-                "data": success_message
+                "data": [{
+                    "message": "Updated Incident's location"
+                     }]
             }), 201)
         return {"status": 404,
                 "data": [{
@@ -250,7 +247,7 @@ class UpdateComment(Resource):
         paserrr.add_argument('comment',
                              type=has_valid_characters,
                              required=True,
-                             help="comment field cannt be left blank or"
+                             help="comment field is required or"
                              "{error_msg},400"
                              )
         paserrr.parse_args()
