@@ -212,14 +212,14 @@ class UpdateLocation(Resource):
 
     def patch(self, redflag_id):
         '''patch location'''
-        paserr = reqparse.RequestParser(bundle_errors=True)
-        paserr.add_argument('location',
-                            type=has_valid_characters,
-                            required=True,
-                            help="location field cannt be left blank or"
-                            "{error_msg},400"
-                            )
-        paserr.parse_args()
+        location_paserr = reqparse.RequestParser(bundle_errors=True)
+        location_paserr.add_argument('location',
+                                     type=has_valid_characters,
+                                     required=True,
+                                     help="location field cannt be left blank or"
+                                     "{error_msg},400"
+                                     )
+        location_paserr.parse_args()
         location_incident = self.db.find(redflag_id)
         if location_incident:
             location_incident['location'] = request.json.get(
