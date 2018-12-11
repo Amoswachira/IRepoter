@@ -12,15 +12,14 @@ def is_valid(value):
         raise ValueError("empty string")
 
 
-def is_title_valid(value):
+def has_valid_characters(value):
     '''check if string has  special characters or numbers
     '''
     if not re.match(r"[A-Za-z]", value):
         raise ValueError("contains special characters or numbers")
 
-##################################################
-# implement validation using reqparse      #######
-##################################################
+
+# implement validation using reqparse
 
 
 PARSER = reqparse.RequestParser(bundle_errors=True)
@@ -33,21 +32,13 @@ PARSER.add_argument('type',
                     )
 
 PARSER.add_argument('createdBy',
-                    type=is_title_valid,
+                    type=has_valid_characters,
                     help="createdBy field can be left blank or {error_msg},400"
                     )
 PARSER.add_argument('location',
-                    type=is_title_valid,
+                    type=has_valid_characters,
                     required=True,
                     help="location field annt be left blank or {error_msg},400"
-                    )
-
-PARSER.add_argument('status',
-                    type=str,
-                    required=True,
-                    choices=("draft"),
-                    help="'statuss field cannot be left "
-                         "blank or Bad choice: {error_msg},400"
                     )
 PARSER.add_argument('images',
                     action='append',
@@ -59,12 +50,12 @@ PARSER.add_argument('videos',
                     )
 
 PARSER.add_argument('comment',
-                    type=is_title_valid,
+                    type=has_valid_characters,
                     required=True,
                     help="comment field cannt be left blank or {error_msg},400"
                     )
 PARSER.add_argument('title',
-                    type=is_title_valid,
+                    type=has_valid_characters,
                     required=True,
                     help="title field cannot be left blank or  {error_msg},400"
                     )
@@ -91,9 +82,7 @@ class RedFlags(Resource):
             'title': request.json['title'],
             'comment': request.json.get('comment', "")
         }
-        ##################################################
-        # validate if incidents are of type string    ####
-        ##################################################
+        # validate if incidents are of type string
         for key, value in data.items():
             if key == 'location' and type(value) != str:
                 return {"status": 400,
@@ -131,15 +120,21 @@ class RedFlags(Resource):
 
     def get(self):
         '''get method for all incidents'''
-        self.db.get_all()
-        return make_response(jsonify({
-            "status": 200,
-            "data": self.db.get_all()
-        }), 200)
+        INCIDENTS = self.db.get_all()
+        if len(INCIDENTS) != 0:
+            All_INCIDENTS = self.db.get_all()
+            return make_response(jsonify({
+                "status": 200,
+                "data": All_INCIDENTS
+            }), 200)
+        return {"status": 404,
+                "data": [{
+                    "message": "No Incident records."
+                }]}, 404
 
 
 class RedFlag(Resource):
-    """ 
+    """
     Get method for specific id,
     delete method for a specific id,
     put method for specific id
@@ -219,16 +214,16 @@ class UpdateLocation(Resource):
         '''patch location'''
         paserr = reqparse.RequestParser(bundle_errors=True)
         paserr.add_argument('location',
-                            type=is_title_valid,
+                            type=has_valid_characters,
                             required=True,
                             help="location field cannt be left blank or"
                             "{error_msg},400"
                             )
         paserr.parse_args()
-        incident = self.db.find(redflag_id)
-        if incident:
-            incident['location'] = request.json.get(
-                'location', incident['location'])
+        location_incident = self.db.find(redflag_id)
+        if location_incident:
+            location_incident['location'] = request.json.get(
+                'location', location_incident['location'])
             success_message = {
                 "message": "Updated Incident's location"
             }
@@ -253,7 +248,7 @@ class UpdateComment(Resource):
         '''patch comment method'''
         paserrr = reqparse.RequestParser(bundle_errors=True)
         paserrr.add_argument('comment',
-                             type=is_title_valid,
+                             type=has_valid_characters,
                              required=True,
                              help="comment field cannt be left blank or"
                              "{error_msg},400"
