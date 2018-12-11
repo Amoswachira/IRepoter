@@ -9,6 +9,9 @@ URL_REDFLAGS_ID = "/api/v1/red-flags/1"
 URL_REDFLAGS_IDS = "/api/v1/red-flags/111"
 URL_LOCATION = "/api/v1/red-flags/1/location"
 URL_COMMENT = "/api/v1/red-flags/1/comment"
+URL_NOT_FOUND = "/api/v1/red-flags/787"
+URL_COMMENT_NOT_UPDATED = "/api/v1/red-flags/899/comment"
+URL_LOCATION_NOT_UPDATED = "/api/v1/red-flags/899/location"
 
 
 class RedFlagTestCase(unittest.TestCase):
@@ -91,6 +94,29 @@ class RedFlagTestCase(unittest.TestCase):
         self.assertEqual(response2.status_code, 201)
         self.assertIn("Updated Incident's comment", str(result))
 
+    def test_redflag_not_found(self):
+        '''test redflag not found'''
+        response = self.client.get(URL_NOT_FOUND)
+        result = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertIn("Incident record does not exist", str(result))
+       
+    def test_no_comment_updated(self):
+        """Test if comment  is updated using the right id  in redflag"""
+        response = self.client.patch(URL_COMMENT_NOT_UPDATED, headers=HEADERS,
+                                  data=json.dumps({"comment": "TEST"}))
+        result = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertIn("Incident record Not Found", str(result))
+    
+    def test_no_location_updated(self):
+        """Test if location  is updated using the right id  in redflag"""
+        response = self.client.patch(URL_LOCATION_NOT_UPDATED, headers=HEADERS,
+                                  data=json.dumps({"location": "test location"}))
+        result = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertIn("Incident record Not Found", str(result))
+    
 
 if __name__ == "__main__":
     unittest.main()
